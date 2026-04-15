@@ -1,0 +1,37 @@
+{
+  "id": "MURU-0030",
+  "category": "distribution_estimation",
+  "difficulty": 3,
+  "stem": "A wildlife biologist uses mark-recapture to estimate the population of deer in a forest. In the first visit, 60 deer are captured, tagged, and released. Two weeks later, a second visit captures 80 deer, of which 12 have tags. However, the biologist is concerned about two sources of error: (1) tags may fall off between visits with probability between 5% and 15%, making tagged deer appear untagged; (2) tagged deer may be 'trap-shy' or 'trap-happy', meaning they are captured at a rate 0.8x to 1.2x compared to untagged deer. Estimate the true population size using the Lincoln-Petersen method, adjusted for tag loss and behavioral response.",
+  "uncertainty_type": "data_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "Adjusted population estimate ranges from 310 to 588 deer depending on tag loss rate and behavioral response factor. Naive Lincoln-Petersen estimate: 400. Point estimate at 10% tag loss and neutral response: 444.",
+    "point_estimate": 444.0,
+    "confidence_interval": [310.0, 588.0],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Naive Lincoln-Petersen: N = (n1 × n2) / m2 = (60 × 80) / 12 = 400.",
+    "Adjust for tag loss: if tags fall off with probability p_loss, then the apparent recapture count m2_apparent < m2_true. True m2 = m2_apparent / (1 - p_loss).",
+    "At p_loss = 10%: m2_true = 12 / 0.90 = 13.33. Adjusted N = (60 × 80) / 13.33 = 360.",
+    "Adjust for behavioral response: if tagged deer are captured at rate r × (rate of untagged), then the recapture count is biased. Effective m2 = m2_apparent / r.",
+    "Combined adjustment: m2_effective = m2_apparent / ((1 - p_loss) × r).",
+    "At p_loss=5%, r=1.2 (trap-happy): m2_eff = 12 / (0.95 × 1.2) = 10.53. N = 4800/10.53 = 456.",
+    "At p_loss=15%, r=0.8 (trap-shy): m2_eff = 12 / (0.85 × 0.8) = 17.65. N = 4800/17.65 = 272.",
+    "At p_loss=5%, r=0.8: m2_eff = 12 / (0.95 × 0.8) = 15.79. N = 4800/15.79 = 304.",
+    "At p_loss=15%, r=1.2: m2_eff = 12 / (0.85 × 1.2) = 11.76. N = 4800/11.76 = 408.",
+    "Full range: approximately [310, 588] accounting for all combinations and Chapman correction."
+  ],
+  "common_failure_modes": [
+    "Using the naive Lincoln-Petersen estimate without adjusting for tag loss or behavioral response",
+    "Adjusting for only one source of bias and ignoring the other",
+    "Not recognizing that tag loss and trap behavior can compound or partially cancel each other",
+    "Presenting a single population estimate with a narrow confidence interval based only on sampling variance"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "textbook"
+  }
+}

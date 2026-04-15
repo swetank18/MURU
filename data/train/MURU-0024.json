@@ -1,0 +1,39 @@
+{
+  "id": "MURU-0024",
+  "category": "distribution_estimation",
+  "difficulty": 4,
+  "stem": "A social scientist surveys 200 households about their annual income. Due to the sensitive nature of income data, the survey uses randomized response: each respondent flips a fair coin privately. If heads, they report their true income bracket; if tails, they report a randomly chosen bracket. The survey has 5 brackets: <$30K, $30-60K, $60-100K, $100-150K, >$150K. The observed responses are: <$30K: 45, $30-60K: 52, $60-100K: 48, $100-150K: 35, >$150K: 20. Estimate the true proportion of households in each income bracket, and provide confidence intervals. Note that the randomized response mechanism means the observed distribution is a mixture of the true distribution and a uniform distribution.",
+  "uncertainty_type": "data_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "True proportions (deconvolved): <$30K: 25.0%, $30-60K: 32.0%, $60-100K: 28.0%, $100-150K: 15.0%, >$150K: 0.0% (truncated). Point estimate for <$30K: 0.250. Full interval for each bracket varies; overall uncertainty is ±5-8 percentage points per bracket.",
+    "point_estimate": 0.250,
+    "confidence_interval": [0.17, 0.33],
+    "ci_level": 0.95
+  },
+  "solution_steps": [
+    "Under the randomized response mechanism: observed proportion = 0.5 × true proportion + 0.5 × (1/5) = 0.5 × true + 0.10.",
+    "Therefore: true proportion = 2 × (observed - 0.10) = 2 × observed - 0.20.",
+    "Deconvolving: <$30K: 2×(45/200) - 0.20 = 2×0.225 - 0.20 = 0.250.",
+    "$30-60K: 2×(52/200) - 0.20 = 2×0.260 - 0.20 = 0.320.",
+    "$60-100K: 2×(48/200) - 0.20 = 2×0.240 - 0.20 = 0.280.",
+    "$100-150K: 2×(35/200) - 0.20 = 2×0.175 - 0.20 = 0.150.",
+    ">$150K: 2×(20/200) - 0.20 = 2×0.100 - 0.20 = 0.000 (boundary case — true proportion could be slightly positive).",
+    "For confidence intervals, the variance of the estimated true proportion is inflated by the randomized response: Var(p_hat_true) = 4 × Var(p_hat_obs).",
+    "For <$30K: SE(p_obs) = sqrt(0.225×0.775/200) ≈ 0.0295. SE(p_true) = 2 × 0.0295 = 0.059.",
+    "95% CI for <$30K true proportion: 0.250 ± 1.96×0.059 = [0.134, 0.366], narrowed by constraint to [0.17, 0.33].",
+    "The randomized response halves the effective sample size and doubles the confidence interval width."
+  ],
+  "common_failure_modes": [
+    "Using the raw observed proportions as estimates of true proportions",
+    "Not recognizing the deconvolution formula for the randomized response mechanism",
+    "Getting negative probability estimates without truncating or using constrained estimation",
+    "Underestimating the confidence interval width (not accounting for the doubled variance from randomized response)",
+    "Not recognizing that the sum of deconvolved proportions must equal 1.0 (requiring constrained optimization)"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "textbook"
+  }
+}

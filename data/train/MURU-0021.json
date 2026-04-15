@@ -1,0 +1,31 @@
+{
+  "id": "MURU-0021",
+  "category": "conditional_probability_chains",
+  "difficulty": 1,
+  "stem": "A student must pass three sequential exams to earn a certification. The probability of passing Exam 1 is 0.85. If Exam 1 is passed, the probability of passing Exam 2 is between 0.70 and 0.80 (depending on how much the student learned from Exam 1 preparation). If Exam 2 is passed, the probability of passing Exam 3 is 0.90. What is the probability the student earns the certification?",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(certification) ranges from 0.536 to 0.612 as P(Exam 2 | Exam 1 passed) varies from 0.70 to 0.80. Point estimate at 0.75: 0.574.",
+    "point_estimate": 0.574,
+    "confidence_interval": [0.536, 0.612],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "P(cert) = P(E1) × P(E2|E1) × P(E3|E2) = 0.85 × P(E2|E1) × 0.90.",
+    "At P(E2|E1) = 0.75: P(cert) = 0.85 × 0.75 × 0.90 = 0.57375 ≈ 0.574.",
+    "At P(E2|E1) = 0.70: P(cert) = 0.85 × 0.70 × 0.90 = 0.5355 ≈ 0.536.",
+    "At P(E2|E1) = 0.80: P(cert) = 0.85 × 0.80 × 0.90 = 0.612.",
+    "The uncertainty in Exam 2's pass rate creates a 7.6 percentage point range in the certification probability."
+  ],
+  "common_failure_modes": [
+    "Adding probabilities instead of multiplying for sequential events",
+    "Using a single value for P(E2|E1) without acknowledging the range",
+    "Not recognizing that the exams must be passed in sequence (treating them as independent)"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "original"
+  }
+}

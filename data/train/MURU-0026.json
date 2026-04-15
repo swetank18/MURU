@@ -1,0 +1,39 @@
+{
+  "id": "MURU-0026",
+  "category": "decision_under_uncertainty",
+  "difficulty": 4,
+  "stem": "A startup must choose between three strategies for its product launch. Strategy A (Safe Launch): guaranteed revenue of $500K. Strategy B (Aggressive Launch): with probability 0.3-0.5 yields $2M, with probability 0.3-0.4 yields $400K, and with remaining probability yields $0 (failure). Strategy C (Partnership): with probability 0.6-0.8 yields $800K, and with remaining probability yields $200K. The startup's survival depends on making at least $300K (below this they run out of runway). The CEO is risk-averse with utility function U(x) = √x for x ≥ 0 and U(x) = -2√|x| for x < 0 (loss aversion). Which strategy maximizes expected utility, and how robust is this recommendation to the parameter uncertainties?",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "decision_theory",
+  "ground_truth": {
+    "answer": "Expected utility: A = 707.1 (fixed). B ranges from 493 to 670. C ranges from 679 to 754. Strategy C is optimal in most scenarios (C dominates A when P(800K) > 0.65). Strategy ranking by robustness: C > A > B.",
+    "point_estimate": 716.0,
+    "confidence_interval": [679.0, 754.0],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Strategy A: U(500K) = √500000 = 707.1. No uncertainty — this is the certainty equivalent.",
+    "Strategy B: EU(B) = P1 × √2000000 + P2 × √400000 + P3 × √0 = P1 × 1414.2 + P2 × 632.5 + 0.",
+    "At P1=0.3, P2=0.4, P3=0.3: EU(B) = 0.3×1414.2 + 0.4×632.5 = 424.3 + 253.0 = 677.3.",
+    "At P1=0.5, P2=0.3, P3=0.2: EU(B) = 0.5×1414.2 + 0.3×632.5 = 707.1 + 189.8 = 896.9.",
+    "At worst P1=0.3, P2=0.3, P3=0.4: EU(B) = 424.3 + 189.8 = 614.0.",
+    "Strategy C: EU(C) = P(800K) × √800000 + (1-P) × √200000 = P × 894.4 + (1-P) × 447.2.",
+    "At P=0.6: EU(C) = 0.6×894.4 + 0.4×447.2 = 536.6 + 178.9 = 715.5.",
+    "At P=0.8: EU(C) = 0.8×894.4 + 0.2×447.2 = 715.5 + 89.4 = 804.9.",
+    "Survival constraint: B has P3 probability of $0 (< $300K threshold) — survival risk ranges from 20-40%.",
+    "C always yields ≥ $200K, which is below survival threshold with probability 0.2-0.4. A always survives.",
+    "Ranking: C > A > B for expected utility; A > C > B for survival guarantee."
+  ],
+  "common_failure_modes": [
+    "Using expected monetary value instead of expected utility (ignoring risk aversion)",
+    "Not computing the full range of expected utilities across parameter uncertainties",
+    "Ignoring the survival constraint ($300K minimum) and its interaction with strategy risk",
+    "Not recognizing that Strategy B's attractiveness is highly sensitive to the probability parameters",
+    "Giving a single recommendation without discussing robustness to parameter changes"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "original"
+  }
+}

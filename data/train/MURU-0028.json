@@ -1,0 +1,38 @@
+{
+  "id": "MURU-0028",
+  "category": "adversarial_ambiguity",
+  "difficulty": 4,
+  "stem": "Three independent laboratories each test a new material for toxicity. Lab A tests 100 samples and finds 5% toxicity rate (5 toxic). Lab B tests 200 samples and finds 3% toxicity rate (6 toxic). Lab C tests 50 samples and finds 10% toxicity rate (5 toxic). A regulatory body must determine the true toxicity rate. Lab A and Lab C used the same testing protocol, while Lab B used a newer protocol that is believed to have a 1-3% false negative rate (missing truly toxic samples). All labs may have a 0.5-1.5% false positive rate. The regulatory body uses a 'preponderance of evidence' standard: the material is classified as toxic if P(true toxicity > 5%) > 0.5. Should the material be classified as toxic?",
+  "uncertainty_type": "model_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(true toxicity > 5%) ranges from 0.35 to 0.72 depending on how Lab B's protocol bias and false positive rates are modeled. Point estimate: 0.52. The classification is ambiguous — it depends critically on how the evidence is weighted.",
+    "point_estimate": 0.52,
+    "confidence_interval": [0.35, 0.72],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Naive pooling: 16 toxic out of 350 total = 4.57%. This is below 5% — material appears safe.",
+    "But Lab B's false negative rate (1-3%) means its 3% observed rate understates the truth. Corrected Lab B rate: (0.03 + FNR) / (1 - FNR + FPR).",
+    "At FNR=2%, FPR=1%: corrected Lab B ≈ (0.03+0.02)/(1-0.02+0.01) = 0.05/0.99 ≈ 5.05%.",
+    "Weighting by sample size with corrected rates: use inverse-variance weighting or Bayesian hierarchical model.",
+    "Lab A Beta posterior: Beta(6,96), mean=5.9%. Lab B corrected: ~5.0%. Lab C Beta posterior: Beta(6,46), mean=11.5%.",
+    "Lab C's high rate from only 50 samples has wide uncertainty — 95% CI: [3.8%, 20.3%].",
+    "Hierarchical model: the labs are estimating the same underlying rate θ with different precisions and potential biases.",
+    "Posterior for θ concentrates around 5-6%, with P(θ > 5%) ≈ 0.52 at mid-range assumptions.",
+    "At extremes: if Lab B bias is 3% and FPR is low → P(θ>5%) ≈ 0.72. If Lab B bias is 1% and all FPR is 1.5% → P(θ>5%) ≈ 0.35.",
+    "The adversarial element: the answer straddles the regulatory threshold, making the classification inherently uncertain."
+  ],
+  "common_failure_modes": [
+    "Simply pooling all data without adjusting for Lab B's protocol differences",
+    "Giving equal weight to all labs regardless of sample size (Lab C's 50 samples get too much influence)",
+    "Ignoring the false positive and false negative rates entirely",
+    "Providing a confident classification (toxic or not-toxic) when the evidence is genuinely ambiguous",
+    "Not recognizing that the regulatory threshold (5%) falls within the credible interval, making any binary classification unreliable"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}

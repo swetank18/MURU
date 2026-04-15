@@ -1,0 +1,38 @@
+{
+  "id": "MURU-0023",
+  "category": "conditional_probability_chains",
+  "difficulty": 5,
+  "stem": "A hospital's diagnostic pathway for a rare condition involves three tests administered sequentially. Test 1 (screening) has sensitivity 92% and specificity 85%. Only patients who test positive on Test 1 proceed to Test 2 (confirmatory), which has sensitivity 88-94% and specificity 95%. Only patients positive on Test 2 proceed to Test 3 (definitive), which has sensitivity 98% and specificity 99%. The disease prevalence in the screened population is 2%, but there is a referral bias: patients referred to this hospital are 2-4 times more likely to have the disease than the general screened population, so the effective prevalence for this hospital is between 4% and 8%. A patient tests positive on all three tests. What is the probability they have the disease? Also compute: if the patient tested negative on Test 3 (but positive on Tests 1 and 2), what is the probability they have the disease?",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(disease | all 3 positive): [0.936, 0.987] depending on prevalence and Test 2 sensitivity. Point estimate: 0.968. P(disease | pos-pos-neg): [0.027, 0.108]. Point estimate: 0.058.",
+    "point_estimate": 0.968,
+    "confidence_interval": [0.936, 0.987],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Sequential Bayesian updating: use posterior from each test as prior for the next.",
+    "Test 1: P(D|T1+) = Se1×P(D) / [Se1×P(D) + (1-Sp1)×P(¬D)]. At prev=6%: = 0.92×0.06 / (0.92×0.06 + 0.15×0.94) = 0.0552/0.1962 = 0.2814.",
+    "Test 2: Use P(D) = 0.2814 from Test 1. At Se2=0.91: P(D|T2+) = 0.91×0.2814 / (0.91×0.2814 + 0.05×0.7186) = 0.2561/0.2920 = 0.8771.",
+    "Test 3: Use P(D) = 0.8771 from Test 2. P(D|T3+) = 0.98×0.8771 / (0.98×0.8771 + 0.01×0.1229) = 0.8595/0.8607 = 0.9986.",
+    "Varying prevalence [4%, 8%] and Se2 [0.88, 0.94] gives final posterior range [0.936, 0.987].",
+    "For T3 negative case: P(D|T3-) = (1-Se3)×P(D after T2) / [(1-Se3)×P(D after T2) + Sp3×P(¬D after T2)].",
+    "At P(D after T2)=0.8771: P(D|T3-) = 0.02×0.8771 / (0.02×0.8771 + 0.99×0.1229) = 0.01754/0.1392 = 0.1260.",
+    "Varying parameters: P(D|pos-pos-neg) ∈ [0.027, 0.108], showing that a negative definitive test substantially reduces but does not eliminate disease probability.",
+    "Point estimate for pos-pos-neg: 0.058."
+  ],
+  "common_failure_modes": [
+    "Not performing sequential updates — using prevalence as the prior for all three tests simultaneously",
+    "Ignoring the referral bias adjustment to prevalence",
+    "Not recognizing that the sequential positive results dramatically increase the effective prior for each subsequent test",
+    "For the negative Test 3 case: concluding the patient definitely doesn't have the disease",
+    "Not jointly varying the prevalence and Test 2 sensitivity uncertainties",
+    "Computing the wrong conditional direction (P(test result | disease) instead of P(disease | test result))"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "MURU-0027",
+  "category": "decision_under_uncertainty",
+  "difficulty": 5,
+  "stem": "An insurance company must set the premium for flood insurance in a coastal region. Historical data from the last 50 years shows an average of 1.2 major floods per decade, but climate scientists warn that climate change may increase this rate by 30-80% over the next decade. Each major flood causes insured losses between $50M and $200M (log-normally distributed with geometric mean $90M and geometric standard deviation 2.0). The company insures $500M in total property value and wants to set a premium that achieves a target loss ratio (claims/premiums) between 0.60 and 0.75 with 90% confidence. Assume floods follow a Poisson process. What annual premium should the company charge, and what is the probability of insolvency (total claims exceeding $500M) over a 10-year policy period?",
+  "uncertainty_type": "epistemic_uncertainty",
+  "required_framework": "monte_carlo",
+  "ground_truth": {
+    "answer": "Required annual premium ranges from $18M to $52M depending on climate change severity and loss ratio target. Point estimate at 55% rate increase and 0.675 loss ratio: $31M/year. P(insolvency in 10 years) ranges from 0.02 to 0.12.",
+    "point_estimate": 31.0,
+    "confidence_interval": [18.0, 52.0],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Base flood rate: λ_base = 1.2 per decade = 0.12 per year.",
+    "Climate-adjusted rate: λ = 0.12 × (1.3 to 1.8) = 0.156 to 0.216 per year. Mid: 0.186.",
+    "Expected annual losses: E[N] × E[L] where N ~ Poisson(λ), L ~ Lognormal(ln(90M), ln(2.0)).",
+    "E[L] = exp(μ + σ²/2) = exp(ln(90) + (ln2)²/2) = 90 × exp(0.240) ≈ 90 × 1.271 = $114.4M.",
+    "E[annual losses] = λ × E[L] = 0.186 × $114.4M = $21.3M.",
+    "Premium at loss ratio 0.675: Premium = E[losses] / loss_ratio = $21.3M / 0.675 = $31.5M.",
+    "At λ=0.156, LR=0.75: Premium = 0.156×114.4/0.75 = $23.8M.",
+    "At λ=0.216, LR=0.60: Premium = 0.216×114.4/0.60 = $41.2M.",
+    "For insolvency: need P(sum of all flood losses in 10 years > $500M). This requires compound Poisson simulation.",
+    "10-year expected number of floods: 10×0.186 = 1.86. P(≥3 floods) ≈ 0.15-0.25 depending on λ.",
+    "Via Monte Carlo: simulate N ~ Poisson(10λ), then sum N lognormal losses, check if > $500M. P(insolvency) ≈ 0.02-0.12."
+  ],
+  "common_failure_modes": [
+    "Using the historical flood rate without the climate change adjustment",
+    "Using the geometric mean ($90M) as the expected loss instead of computing the mean of the lognormal",
+    "Not recognizing the compound Poisson nature of the aggregate loss model",
+    "Setting the premium based on expected losses without the loss ratio buffer",
+    "Computing insolvency probability analytically without recognizing it requires simulation for compound Poisson-Lognormal",
+    "Ignoring the heavy tail of the lognormal loss distribution when assessing insolvency risk"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}

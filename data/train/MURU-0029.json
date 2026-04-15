@@ -1,0 +1,42 @@
+{
+  "id": "MURU-0029",
+  "category": "adversarial_ambiguity",
+  "difficulty": 5,
+  "stem": "A prediction market for a geopolitical event currently prices the probability of the event at 35%. An analyst has a private signal from a reliable source (accuracy 75-85%) suggesting the event WILL occur. Separately, a second analyst has a private signal from an independent source (accuracy 70-80%) suggesting the event will NOT occur. Both analysts observe the market price of 35% and want to update their beliefs. However, there is a meta-question: the market price itself may already incorporate information from other participants who have similar private signals. If the market has already partially incorporated N = 5-20 signals of mixed quality, how should each analyst update their own beliefs? What is the rational posterior for the event probability given both private signals and the market price, and how does the answer depend on assumptions about market efficiency?",
+  "uncertainty_type": "structural_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "Under strong market efficiency (market incorporates all signals): posterior ≈ 0.35, the market price is already correct. Under weak efficiency (market incorporates few signals): posterior ranges from 0.28 to 0.52 depending on relative signal strengths. Under moderate efficiency: 0.30 to 0.42. Point estimate under moderate efficiency: 0.36.",
+    "point_estimate": 0.36,
+    "confidence_interval": [0.28, 0.52],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "This problem has fundamental structural ambiguity about what information the market price already contains.",
+    "Case 1 — Strong efficiency (all signals incorporated): The market price IS the posterior. Both analysts' signals are already priced in. Rational action: believe 35%.",
+    "Case 2 — Weak efficiency (few signals incorporated, neither analyst's is priced in):",
+    "Start with base rate from market: P(event) = 0.35.",
+    "Analyst 1 signal (positive, accuracy A1 ∈ [0.75, 0.85]): Updated P = A1×0.35 / (A1×0.35 + (1-A1)×0.65).",
+    "At A1=0.80: P(event|sig1) = 0.80×0.35 / (0.80×0.35 + 0.20×0.65) = 0.280/0.410 = 0.683.",
+    "Analyst 2 signal (negative, accuracy A2 ∈ [0.70, 0.80]): P(event|sig1,sig2) = (1-A2)×0.683 / ((1-A2)×0.683 + A2×0.317).",
+    "At A2=0.75: P(event|both) = 0.25×0.683 / (0.25×0.683 + 0.75×0.317) = 0.171/0.409 = 0.418.",
+    "Range across signal accuracies under weak efficiency: [0.35, 0.52].",
+    "Case 3 — Moderate efficiency (some but not all signals incorporated): posterior is between cases 1 and 2.",
+    "The number of pre-incorporated signals N affects how much new signals should update beliefs. More pre-incorporation → less updating.",
+    "With N=5-20 pre-incorporated signals, the marginal information content of two additional signals varies: at N=5 they matter more, at N=20 they're largely redundant.",
+    "Full range across all structural assumptions: [0.28, 0.52]."
+  ],
+  "common_failure_modes": [
+    "Ignoring the market price and computing posteriors from signal accuracy alone",
+    "Naively applying both signals sequentially to the market price without considering that the market already incorporates similar information",
+    "Assuming perfect market efficiency and concluding the posterior is exactly 35%",
+    "Not recognizing the structural ambiguity: the answer fundamentally depends on the assumed level of market efficiency",
+    "Treating the two conflicting signals as 'canceling out' without computing their differential impact",
+    "Double-counting information that may already be reflected in the market price"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "original"
+  }
+}

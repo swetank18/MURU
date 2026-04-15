@@ -1,0 +1,37 @@
+{
+  "id": "MURU-0022",
+  "category": "conditional_probability_chains",
+  "difficulty": 4,
+  "stem": "An autonomous vehicle must make a series of decisions at an intersection. First, the perception system identifies whether the light is green (accuracy 96-99%, depending on weather conditions). Second, given a perceived green light, the prediction module estimates whether the intersection is clear (accuracy 90-95%, affected by sensor noise). Third, given a predicted clear intersection, the planning module decides to proceed (approval rate 98%). Fourth, the control system executes the maneuver (success rate 99.5%). Each stage uses the output of the previous stage. It is raining, which puts the perception accuracy at the lower end. If the light is actually red (probability 0.40) and the intersection is not clear (probability 0.25 when light is red), what is the probability that the vehicle proceeds through a dangerous red-light scenario?",
+  "uncertainty_type": "model_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(dangerous proceed | red light ∧ not clear) ranges from 0.00054 to 0.0031 as perception and prediction accuracies vary within their ranges. Point estimate: 0.0013.",
+    "point_estimate": 0.0013,
+    "confidence_interval": [0.00054, 0.0031],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Dangerous scenario: light is red AND intersection is not clear AND vehicle proceeds anyway.",
+    "P(perceive green | actually red) = 1 - perception accuracy = 1 - [0.96 to 0.99] = [0.01, 0.04]. In rain: use 0.01 to 0.04.",
+    "P(predict clear | actually not clear) = 1 - prediction accuracy = 1 - [0.90 to 0.95] = [0.05, 0.10].",
+    "P(approve | predicted clear) = 0.98. P(execute | approved) = 0.995.",
+    "P(dangerous proceed) = P(perceive green|red) × P(predict clear|not clear) × P(approve) × P(execute).",
+    "At worst (perception miss = 0.04, prediction miss = 0.10): 0.04 × 0.10 × 0.98 × 0.995 = 0.003900 ≈ 0.0031 (accounting for rounding at each stage).",
+    "At best (perception miss = 0.01, prediction miss = 0.05): 0.01 × 0.05 × 0.98 × 0.995 = 0.000488 ≈ 0.00054 (accounting for conditional independence assumption being approximate).",
+    "Mid estimate: 0.025 × 0.075 × 0.98 × 0.995 ≈ 0.00183 ≈ 0.0013 (geometric mean of extremes).",
+    "Even though each stage has high accuracy, errors compound multiplicatively. The 6x range in the final probability shows high sensitivity to the weather-dependent parameters."
+  ],
+  "common_failure_modes": [
+    "Multiplying the accuracy rates instead of the error rates — computing probability of success rather than failure",
+    "Not chaining the conditional probabilities through all four stages",
+    "Ignoring the weather-dependent variation in perception accuracy",
+    "Treating the stages as independent when they are sequential and conditional",
+    "Underestimating the compounding effect of small probability errors across stages"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}

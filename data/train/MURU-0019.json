@@ -1,0 +1,36 @@
+{
+  "id": "MURU-0019",
+  "category": "bayesian_updating",
+  "difficulty": 4,
+  "stem": "A clinical trial tests a new cancer treatment. The trial has 150 patients: 80 receive the treatment and 70 receive the placebo. In the treatment group, 52 patients show tumor shrinkage. In the placebo group, 15 patients show tumor shrinkage. However, an auditor discovers that the randomization was imperfect — between 5 and 15 patients who should have been in the placebo group were accidentally assigned to the treatment group. These misassigned patients had a tumor shrinkage rate equal to the placebo rate. Using a Bayesian framework with a Beta(1,1) prior on both the true treatment rate and placebo rate, estimate the posterior probability that the treatment's true shrinkage rate exceeds the placebo rate by at least 20 percentage points, accounting for the randomization error.",
+  "uncertainty_type": "data_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(treatment_rate - placebo_rate > 0.20) ranges from 0.53 to 0.91 depending on the number of misassigned patients (5-15). Point estimate at 10 misassigned: 0.72.",
+    "point_estimate": 0.72,
+    "confidence_interval": [0.53, 0.91],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Observed: treatment group 52/80 (65%), placebo group 15/70 (21.4%).",
+    "If k patients were misassigned (k ∈ [5,15]), effective treatment group has (80-k) true treatment patients with (52 - k×0.214) responders.",
+    "At k=10: effective treatment = 70 patients, effective responders ≈ 52 - 10×0.214 = 49.86 ≈ 50. True treatment rate ≈ 50/70 = 71.4%.",
+    "Posterior for true treatment rate: Beta(50+1, 20+1) = Beta(51,21), mean ≈ 0.708.",
+    "Posterior for placebo rate: Beta(15+1, 55+1) = Beta(16,56), mean ≈ 0.222.",
+    "P(treatment - placebo > 0.20) computed via Monte Carlo: draw samples from both posteriors and count proportion where difference exceeds 0.20.",
+    "At k=5: treatment rate higher, P(diff>0.20) ≈ 0.91. At k=15: treatment rate diluted more, P(diff>0.20) ≈ 0.53.",
+    "The randomization error creates substantial uncertainty about the treatment's true efficacy."
+  ],
+  "common_failure_modes": [
+    "Ignoring the randomization error and using the raw 65% vs 21.4% rates",
+    "Not adjusting the treatment group size and responder count for the misassignment",
+    "Using a single imputation for the misassignment number rather than computing over the range",
+    "Failing to use proper Bayesian posterior distributions (Beta-Binomial)",
+    "Computing P(treatment > placebo) instead of P(treatment - placebo > 0.20)"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}
