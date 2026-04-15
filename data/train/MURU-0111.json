@@ -1,0 +1,35 @@
+{
+  "id": "MURU-0111",
+  "category": "bayesian_updating",
+  "difficulty": 3,
+  "stem": "A hospital uses an ELISA screening test to screen for Lyme disease. The test has a sensitivity of 78% and a specificity of 86%. The prevalence of Lyme disease in the patient population is estimated to be between 9.1% and 24.4%, with uncertainty due to regional variation and demographic differences in the hospital's catchment area. A patient receives a positive test result. What is the probability that the patient actually has Lyme disease? Provide your answer as a probability with a confidence interval reflecting the uncertainty in prevalence.",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(Lyme disease | positive test) ranges from 0.358 to 0.643 as prevalence varies from 9.1% to 24.4%. Point estimate at 16.7% prevalence: 0.528.",
+    "point_estimate": 0.528,
+    "confidence_interval": [
+      0.358,
+      0.643
+    ],
+    "ci_level": 0.9
+  },
+  "solution_steps": [
+    "Apply Bayes' theorem: P(D|+) = P(+|D)\u00d7P(D) / [P(+|D)\u00d7P(D) + P(+|\u00acD)\u00d7P(\u00acD)], where P(+|\u00acD) = 1-specificity = 0.14.",
+    "At prevalence 16.7%: P(D|+) = 0.78\u00d70.167 / (0.78\u00d70.167 + 0.14\u00d70.833) \u2248 0.528.",
+    "At prevalence 9.1%: P(D|+) = 0.78\u00d70.091 / (0.78\u00d70.091 + 0.14\u00d70.909) \u2248 0.358.",
+    "At prevalence 24.4%: P(D|+) = 0.78\u00d70.244 / (0.78\u00d70.244 + 0.14\u00d70.756) \u2248 0.643.",
+    "The confidence interval [0.358, 0.643] reflects the range of posterior probabilities over plausible prevalence values."
+  ],
+  "common_failure_modes": [
+    "Confusing sensitivity (78%) with positive predictive value",
+    "Providing only a point estimate without acknowledging the prevalence uncertainty",
+    "Ignoring the base rate (prevalence) and using the test sensitivity as the answer",
+    "Not recognizing the strong base rate effect when prevalence is low"
+  ],
+  "metadata": {
+    "author": "generator_medical_test",
+    "reviewed": false,
+    "source_inspiration": "original"
+  }
+}

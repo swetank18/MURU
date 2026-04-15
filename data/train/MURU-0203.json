@@ -1,0 +1,34 @@
+{
+  "id": "MURU-0203",
+  "category": "conditional_probability_chains",
+  "difficulty": 4,
+  "stem": "A application enters the immigration pipeline. The probability of passing document verification is 87%. If the previous stage is passed, the probability of passing background check is 92%. If the previous stage is passed, the probability of passing interview is between 59% and 73% (uncertain due to evaluator variability). If the previous stage is passed, the probability of passing visa issuance is 95%. What is the overall probability that the application is approved?",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(approved) ranges from 0.449 to 0.555 as the interview pass rate varies from 59% to 73%. Point estimate: 0.502.",
+    "point_estimate": 0.502,
+    "confidence_interval": [
+      0.449,
+      0.555
+    ],
+    "ci_level": 0.9
+  },
+  "solution_steps": [
+    "The application must pass all 4 stages sequentially: P(success) = P(stage 1)\u00d7P(stage 2)\u00d7P(stage 3)\u00d7P(stage 4).",
+    "At mid-range: P(success) = 0.87 \u00d7 0.92 \u00d7 0.66 \u00d7 0.95 = 0.502.",
+    "At lower bound: P(success) = 0.87 \u00d7 0.92 \u00d7 0.59 \u00d7 0.95 = 0.449.",
+    "At upper bound: P(success) = 0.87 \u00d7 0.92 \u00d7 0.73 \u00d7 0.95 = 0.555.",
+    "The uncertainty in the interview stage creates a 10.6 percentage point range in the overall success probability."
+  ],
+  "common_failure_modes": [
+    "Adding probabilities instead of multiplying for sequential stages",
+    "Using a single value for the interview rate without acknowledging uncertainty",
+    "Not recognizing that uncertainty at one stage propagates through all subsequent stages"
+  ],
+  "metadata": {
+    "author": "generator_pipeline",
+    "reviewed": false,
+    "source_inspiration": "original"
+  }
+}
