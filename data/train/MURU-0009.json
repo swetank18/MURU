@@ -1,0 +1,33 @@
+{
+  "id": "MURU-0009",
+  "category": "bayesian_updating",
+  "difficulty": 3,
+  "stem": "A machine learning engineer is evaluating whether a model A is better than model B based on A/B test results. In 500 trials, Model A achieved 68% accuracy and Model B achieved 64% accuracy. However, the test set difficulty varied — some batches were harder than others, introducing noise. The engineer estimates that the true accuracy difference could be inflated or deflated by 1-3 percentage points due to batch effects. Using a Bayesian framework with a uniform prior on each model's true accuracy, what is the probability that Model A is genuinely better than Model B (i.e., has higher true accuracy)?",
+  "uncertainty_type": "data_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(A better than B) ranges from 0.72 to 0.95 depending on the magnitude of batch effects (1-3 pp adjustment). Point estimate at 2 pp batch noise: 0.85.",
+    "point_estimate": 0.85,
+    "confidence_interval": [0.72, 0.95],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Model each model's true accuracy with a Beta posterior: A ~ Beta(341, 161), B ~ Beta(321, 181).",
+    "Without batch effects: P(A > B) can be computed via Monte Carlo sampling from both posteriors ≈ 0.95.",
+    "With 1 pp batch noise: The effective accuracy difference is 4% ± 1%, P(true diff > 0) ≈ 0.95.",
+    "With 2 pp batch noise: Effective difference could be as small as 2%, P(true diff > 0) ≈ 0.85.",
+    "With 3 pp batch noise: Effective difference could be as small as 1%, P(true diff > 0) ≈ 0.72.",
+    "The batch effects substantially erode confidence in the 4% observed difference."
+  ],
+  "common_failure_modes": [
+    "Using a simple proportion test and ignoring batch effects entirely",
+    "Reporting high confidence (>95%) based solely on the observed 4% gap without accounting for data noise",
+    "Not using a proper Bayesian posterior comparison",
+    "Treating 68% vs 64% as definitive evidence without uncertainty quantification"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}

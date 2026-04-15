@@ -1,0 +1,33 @@
+{
+  "id": "MURU-0010",
+  "category": "bayesian_updating",
+  "difficulty": 1,
+  "stem": "A search and rescue team is looking for a missing hiker in a forest. Based on the hiker's last known position and typical movement patterns, the team estimates a 50% probability the hiker is in Zone A and 50% in Zone B. They search Zone A first and do not find the hiker. However, their search effectiveness is uncertain — forest density varies, and they estimate their detection probability in Zone A is between 60% and 80%. Given they did not find the hiker in Zone A, what is the updated probability that the hiker is in Zone B?",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(Zone B | not found in A) ranges from 0.714 to 0.833 as Zone A detection probability varies from 60% to 80%. Point estimate at 70% detection: 0.769.",
+    "point_estimate": 0.769,
+    "confidence_interval": [0.714, 0.833],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Apply Bayes' theorem: P(B | ¬found_A) = P(¬found_A | B) * P(B) / P(¬found_A).",
+    "If hiker is in B: P(¬found in A | in B) = 1 (cannot find someone who isn't there).",
+    "If hiker is in A: P(¬found in A | in A) = 1 - detection_probability.",
+    "P(¬found_A) = P(¬found|A)*P(A) + P(¬found|B)*P(B) = (1-det)*0.5 + 1*0.5.",
+    "At detection 70%: P(B|¬found) = 1*0.5 / (0.3*0.5 + 1*0.5) = 0.5 / 0.65 ≈ 0.769.",
+    "At detection 60%: P(B|¬found) = 0.5 / (0.4*0.5 + 0.5) = 0.5 / 0.70 ≈ 0.714.",
+    "At detection 80%: P(B|¬found) = 0.5 / (0.2*0.5 + 0.5) = 0.5 / 0.60 ≈ 0.833."
+  ],
+  "common_failure_modes": [
+    "Assuming that not finding the hiker in Zone A means they are definitely in Zone B (answering 100%)",
+    "Ignoring the uncertain detection probability and using a single value",
+    "Not applying Bayes' theorem correctly for negative evidence (absence of detection)"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "textbook"
+  }
+}

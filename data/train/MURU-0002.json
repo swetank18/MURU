@@ -1,0 +1,31 @@
+{
+  "id": "MURU-0002",
+  "category": "bayesian_updating",
+  "difficulty": 1,
+  "stem": "A quality control inspector examines products from two assembly lines. Line A is responsible for 70% of total output and has a defect rate of 3%. Line B handles 30% of output, but its defect rate is uncertain — maintenance records suggest it lies between 5% and 9%. A randomly selected product is found to be defective. What is the probability it came from Line B?",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(Line B | defective) ranges from 0.417 to 0.563 as Line B defect rate varies from 5% to 9%. Point estimate at 7%: 0.500.",
+    "point_estimate": 0.500,
+    "confidence_interval": [0.417, 0.563],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Apply Bayes' theorem: P(B|def) = P(def|B) * P(B) / [P(def|A)*P(A) + P(def|B)*P(B)].",
+    "At defect rate 7%: P(B|def) = 0.07*0.30 / (0.03*0.70 + 0.07*0.30) = 0.021 / 0.042 = 0.500.",
+    "At defect rate 5%: P(B|def) = 0.05*0.30 / (0.03*0.70 + 0.05*0.30) = 0.015 / 0.036 ≈ 0.417.",
+    "At defect rate 9%: P(B|def) = 0.09*0.30 / (0.03*0.70 + 0.09*0.30) = 0.027 / 0.048 ≈ 0.563.",
+    "The interval [0.417, 0.563] captures the range of posterior probabilities over the plausible defect rates."
+  ],
+  "common_failure_modes": [
+    "Using only the midpoint defect rate and providing a single answer without uncertainty",
+    "Ignoring prior probabilities (the 70/30 output split) and comparing defect rates directly",
+    "Incorrectly assuming the defect rate is exactly known"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "original"
+  }
+}

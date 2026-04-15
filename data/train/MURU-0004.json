@@ -1,0 +1,32 @@
+{
+  "id": "MURU-0004",
+  "category": "bayesian_updating",
+  "difficulty": 2,
+  "stem": "A forensic analyst is examining evidence from a crime scene. There are two suspects, A and B. Prior to examining the DNA evidence, police estimate the probability that Suspect A committed the crime at 60% based on witness testimony. The DNA lab reports a match with Suspect A's sample, but the lab's false match rate is uncertain — published studies put it between 0.1% and 1.0% depending on the type of DNA analysis used. The true match rate (probability of a match given the suspect is guilty) is 99.5%. Given the DNA match, what is the updated probability that Suspect A committed the crime?",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(Guilty | Match) ranges from 0.993 to 0.999 as the false match rate varies from 1.0% to 0.1%. Point estimate at 0.5% false match rate: 0.997.",
+    "point_estimate": 0.997,
+    "confidence_interval": [0.993, 0.999],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Apply Bayes' theorem: P(A|match) = P(match|A)*P(A) / [P(match|A)*P(A) + P(match|¬A)*P(¬A)].",
+    "P(A) = 0.60, P(¬A) = 0.40, P(match|A) = 0.995.",
+    "At false match 0.5%: P(A|match) = 0.995*0.60 / (0.995*0.60 + 0.005*0.40) = 0.597 / 0.599 ≈ 0.9967.",
+    "At false match 0.1%: P(A|match) = 0.995*0.60 / (0.995*0.60 + 0.001*0.40) = 0.597 / 0.5974 ≈ 0.9993.",
+    "At false match 1.0%: P(A|match) = 0.995*0.60 / (0.995*0.60 + 0.010*0.40) = 0.597 / 0.601 ≈ 0.9934.",
+    "Despite the narrow interval, the uncertainty in false match rate creates a meaningful difference in a forensic context."
+  ],
+  "common_failure_modes": [
+    "Treating the DNA match as definitive proof (answering ~100%) without quantifying the false match uncertainty",
+    "Ignoring the prior probability from witness testimony and only using the DNA evidence",
+    "Not recognizing that even a small false match rate range matters in high-stakes forensic decisions"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}

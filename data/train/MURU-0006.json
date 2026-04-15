@@ -1,0 +1,32 @@
+{
+  "id": "MURU-0006",
+  "category": "bayesian_updating",
+  "difficulty": 2,
+  "stem": "A cybersecurity system monitors network traffic for intrusions. The system has a detection rate of 97% for actual attacks and a false alarm rate of 2%. On a typical day, approximately 0.05% to 0.20% of all network connections are actual attack attempts, depending on the current threat level. The security team has observed 1,000 connections today, and the system flagged 25 of them as potential attacks. Using Bayesian reasoning, estimate the proportion of flagged connections that are true attacks, accounting for the uncertainty in the attack base rate.",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "The positive predictive value (proportion of flags that are true attacks) ranges from 0.024 to 0.088 as the attack base rate varies from 0.05% to 0.20%. Point estimate at 0.10%: 0.046.",
+    "point_estimate": 0.046,
+    "confidence_interval": [0.024, 0.088],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Apply Bayes' theorem: PPV = P(attack|flagged) = P(flagged|attack)*P(attack) / P(flagged).",
+    "P(flagged) = P(flagged|attack)*P(attack) + P(flagged|¬attack)*P(¬attack).",
+    "At base rate 0.10%: PPV = 0.97*0.001 / (0.97*0.001 + 0.02*0.999) = 0.00097 / 0.02095 ≈ 0.0463.",
+    "At base rate 0.05%: PPV = 0.97*0.0005 / (0.97*0.0005 + 0.02*0.9995) = 0.000485 / 0.02048 ≈ 0.0237.",
+    "At base rate 0.20%: PPV = 0.97*0.002 / (0.97*0.002 + 0.02*0.998) = 0.00194 / 0.02190 ≈ 0.0886.",
+    "Most flagged connections (~91-98%) are false alarms regardless of the base rate."
+  ],
+  "common_failure_modes": [
+    "Confusing detection rate (97%) with positive predictive value — overestimating true attack proportion dramatically",
+    "Not recognizing the extreme base rate effect (very low attack prevalence means most flags are false positives)",
+    "Giving a single PPV value without considering the range of attack base rates"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}

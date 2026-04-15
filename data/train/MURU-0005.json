@@ -1,0 +1,32 @@
+{
+  "id": "MURU-0005",
+  "category": "bayesian_updating",
+  "difficulty": 2,
+  "stem": "A weather forecasting model predicts rain for tomorrow with 70% probability. Historical analysis shows that when this model predicts rain with 70% probability, it actually rains about 60-75% of the time (the model's calibration varies by season). Additionally, the base rate of rain in this region during April is between 30% and 40%. Using the model's prediction as evidence, what is the posterior probability of rain tomorrow, and how does the uncertainty in the model's calibration and the base rate affect your estimate?",
+  "uncertainty_type": "model_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(Rain | Model predicts 70%) ranges from 0.56 to 0.75 depending on the model calibration and base rate assumptions. Point estimate: 0.65.",
+    "point_estimate": 0.65,
+    "confidence_interval": [0.56, 0.75],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Define: P(R) = base rate, P(pred70|R) = model reliability when rain occurs, P(pred70|¬R) = false alarm rate.",
+    "The model's calibration range (60-75%) means P(R|pred70) directly ranges in [0.60, 0.75] by the calibration definition.",
+    "However, this must be reconciled with the base rate prior P(R) ∈ [0.30, 0.40].",
+    "Using Bayes' theorem and the range of calibrations: at worst calibration (60%) with low base rate (30%), posterior ≈ 0.56.",
+    "At best calibration (75%) with high base rate (40%), posterior ≈ 0.75.",
+    "Point estimate uses mid-calibration (67.5%) and mid-base-rate (35%): posterior ≈ 0.65."
+  ],
+  "common_failure_modes": [
+    "Simply reporting the model's 70% prediction without accounting for calibration uncertainty",
+    "Ignoring the base rate and treating the model output as the true probability",
+    "Not propagating both sources of uncertainty (calibration and base rate) jointly"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "id": "MURU-0007",
+  "category": "bayesian_updating",
+  "difficulty": 3,
+  "stem": "A pharmaceutical company is testing a new drug. In Phase II trials, 40 out of 200 patients showed improvement. However, the placebo group showed an improvement rate between 10% and 18% (uncertain due to small sample size). The company wants to estimate the probability that the drug is truly effective (has an improvement rate higher than the placebo). Use a Bayesian approach with a uniform prior on the drug's true effectiveness rate. What is the posterior probability that the drug's true improvement rate exceeds the placebo rate?",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(drug rate > placebo rate) ranges from 0.62 to 0.92 depending on the assumed placebo improvement rate (10-18%). Point estimate at 14% placebo rate: 0.78.",
+    "point_estimate": 0.78,
+    "confidence_interval": [0.62, 0.92],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "The observed drug improvement rate is 40/200 = 20%.",
+    "Using a Beta-Binomial model with uniform prior Beta(1,1), the posterior for the drug rate is Beta(41, 161) with mean ≈ 0.203.",
+    "P(drug_rate > placebo_rate) = P(Beta(41,161) > placebo_threshold).",
+    "At placebo 10%: P(drug > 0.10) ≈ 0.9994, but we need P(true rate > 0.10), which using the posterior CDF is ≈ 0.92.",
+    "At placebo 14%: P(Beta(41,161) > 0.14) ≈ 0.78 (computed via the regularized incomplete beta function).",
+    "At placebo 18%: P(Beta(41,161) > 0.18) ≈ 0.62.",
+    "The wide range [0.62, 0.92] reflects significant sensitivity to the uncertain placebo baseline."
+  ],
+  "common_failure_modes": [
+    "Simply comparing the observed rates (20% vs 14%) and declaring the drug effective with certainty",
+    "Not using a proper Bayesian posterior (using frequentist p-value instead)",
+    "Ignoring the uncertainty in the placebo rate and computing against a single comparison point",
+    "Failing to use the correct posterior distribution (Beta-Binomial conjugacy)"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}

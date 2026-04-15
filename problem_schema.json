@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MURU-BENCH Problem",
+  "description": "Schema for a single MURU-BENCH problem — Mathematical Reasoning Under Uncertainty.",
+  "type": "object",
+  "required": [
+    "id",
+    "category",
+    "difficulty",
+    "stem",
+    "uncertainty_type",
+    "required_framework",
+    "ground_truth",
+    "solution_steps",
+    "common_failure_modes",
+    "metadata"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^MURU-[0-9]{4,}$",
+      "description": "Unique identifier in the format MURU-XXXX (zero-padded, 4+ digits)."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "bayesian_updating",
+        "conditional_probability_chains",
+        "distribution_estimation",
+        "decision_under_uncertainty",
+        "adversarial_ambiguity"
+      ],
+      "description": "Problem category."
+    },
+    "difficulty": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Difficulty rating from 1 (easiest) to 5 (hardest)."
+    },
+    "stem": {
+      "type": "string",
+      "minLength": 50,
+      "description": "The problem statement in natural language."
+    },
+    "uncertainty_type": {
+      "type": "string",
+      "enum": [
+        "parameter_uncertainty",
+        "model_uncertainty",
+        "data_uncertainty",
+        "structural_uncertainty",
+        "epistemic_uncertainty"
+      ],
+      "description": "The primary type of uncertainty present in the problem."
+    },
+    "required_framework": {
+      "type": "string",
+      "enum": [
+        "bayesian_inference",
+        "frequentist_inference",
+        "decision_theory",
+        "information_theory",
+        "monte_carlo"
+      ],
+      "description": "The correct mathematical framework to solve the problem."
+    },
+    "ground_truth": {
+      "type": "object",
+      "required": [
+        "answer",
+        "point_estimate",
+        "confidence_interval",
+        "ci_level"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "answer": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Human-readable statement of the correct answer including the range."
+        },
+        "point_estimate": {
+          "type": "number",
+          "description": "Best single-number estimate."
+        },
+        "confidence_interval": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "Lower and upper bounds of the confidence/credible interval."
+        },
+        "ci_level": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 0.99,
+          "description": "Confidence/credibility level (e.g. 0.90 for 90%)."
+        }
+      }
+    },
+    "solution_steps": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 10 },
+      "minItems": 2,
+      "description": "Ordered list of reasoning steps to reach the ground truth."
+    },
+    "common_failure_modes": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 5 },
+      "minItems": 1,
+      "description": "Ways an overconfident or incorrect model would fail."
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["author", "reviewed", "source_inspiration"],
+      "additionalProperties": false,
+      "properties": {
+        "author": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Author identifier."
+        },
+        "reviewed": {
+          "type": "boolean",
+          "description": "Whether this problem has been peer-reviewed."
+        },
+        "source_inspiration": {
+          "type": "string",
+          "enum": ["original", "textbook", "paper", "real_world"],
+          "description": "Inspiration source for the problem."
+        }
+      }
+    }
+  }
+}

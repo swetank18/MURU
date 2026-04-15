@@ -1,0 +1,31 @@
+{
+  "id": "MURU-0001",
+  "category": "bayesian_updating",
+  "difficulty": 1,
+  "stem": "A medical test for a rare disease has a sensitivity of 95% (true positive rate) and a specificity of 90% (true negative rate). The disease affects 1% of the population. A patient tests positive. What is the probability that the patient actually has the disease? Express your answer as a probability and provide a confidence interval reflecting the uncertainty in the population prevalence, which epidemiologists estimate could range from 0.5% to 1.5%.",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(Disease | Positive) ranges from 0.046 to 0.126 depending on the true prevalence (0.5% to 1.5%). Point estimate at 1% prevalence: 0.087.",
+    "point_estimate": 0.087,
+    "confidence_interval": [0.046, 0.126],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Apply Bayes' theorem: P(D|+) = P(+|D) * P(D) / P(+), where P(+) = P(+|D)*P(D) + P(+|¬D)*P(¬D).",
+    "At prevalence 1%: P(D|+) = 0.95 * 0.01 / (0.95 * 0.01 + 0.10 * 0.99) = 0.0095 / 0.1085 ≈ 0.0876.",
+    "At prevalence 0.5%: P(D|+) = 0.95 * 0.005 / (0.95 * 0.005 + 0.10 * 0.995) = 0.00475 / 0.10425 ≈ 0.0456.",
+    "At prevalence 1.5%: P(D|+) = 0.95 * 0.015 / (0.95 * 0.015 + 0.10 * 0.985) = 0.01425 / 0.11275 ≈ 0.1264.",
+    "The confidence interval [0.046, 0.126] reflects the range over plausible prevalence values."
+  ],
+  "common_failure_modes": [
+    "Ignoring the base rate and directly using the test sensitivity as the answer (giving 95%)",
+    "Providing only the point estimate 0.087 without acknowledging the prevalence uncertainty",
+    "Confusing sensitivity with positive predictive value"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "textbook"
+  }
+}
