@@ -1,0 +1,31 @@
+{
+  "id": "MURU-0011",
+  "category": "conditional_probability_chains",
+  "difficulty": 2,
+  "stem": "A supply chain has three stages: manufacturing, quality inspection, and shipping. A product passes manufacturing with probability 0.90. If it passes manufacturing, it passes quality inspection with probability between 0.80 and 0.90, depending on which inspector is on duty. If it passes quality inspection, it arrives undamaged during shipping with probability 0.95. What is the overall probability that a product successfully reaches the customer, and how does the inspector variability affect this estimate?",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(success) = P(mfg) * P(QI|mfg) * P(ship|QI) ranges from 0.684 to 0.770 depending on the inspection pass rate (80-90%). Point estimate at 85%: 0.727.",
+    "point_estimate": 0.727,
+    "confidence_interval": [0.684, 0.770],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "The product must pass all three stages in sequence: P(success) = P(mfg) × P(QI|mfg) × P(ship|QI).",
+    "At QI rate 85%: P(success) = 0.90 × 0.85 × 0.95 = 0.72675 ≈ 0.727.",
+    "At QI rate 80%: P(success) = 0.90 × 0.80 × 0.95 = 0.684.",
+    "At QI rate 90%: P(success) = 0.90 × 0.90 × 0.95 = 0.7695 ≈ 0.770.",
+    "The inspector variability (80-90%) creates an 8.6 percentage point range in the final success probability, demonstrating uncertainty propagation through conditional chains."
+  ],
+  "common_failure_modes": [
+    "Using a single fixed inspection rate without acknowledging the range",
+    "Adding probabilities instead of multiplying for sequential independent stages",
+    "Not recognizing that uncertainty at one stage propagates multiplicatively through downstream stages"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "original"
+  }
+}

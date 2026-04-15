@@ -1,0 +1,36 @@
+{
+  "id": "MURU-0017",
+  "category": "adversarial_ambiguity",
+  "difficulty": 3,
+  "stem": "You are told that a coin was flipped 10 times, yielding 7 heads and 3 tails. You are asked: what is the probability the coin is fair? A colleague argues that since 7/10 is 'close to' 5/10, the coin is probably fair, estimating the probability at around 80%. Another colleague uses a frequentist hypothesis test and gets p = 0.17, concluding 'we cannot reject the null that the coin is fair.' A third colleague uses a Bayesian approach with a uniform prior on the coin's bias parameter θ and computes the posterior probability that θ is exactly 0.5. Who, if anyone, is reasoning correctly, and what is the right answer to the question as stated?",
+  "uncertainty_type": "structural_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "The question is fundamentally ambiguous. P(θ = 0.5 exactly) = 0 under a continuous prior. P(θ ∈ [0.45, 0.55]) ≈ 0.11. P(data | fair coin) / P(data) (Bayes factor) ≈ 0.55. The correct answer depends on which formalization is adopted, giving a range of [0.07, 0.55].",
+    "point_estimate": 0.23,
+    "confidence_interval": [0.07, 0.55],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "The question 'what is the probability the coin is fair?' is structurally ambiguous — it can be formalized in at least three different ways.",
+    "Formalization 1 (exact): P(θ = 0.5) = 0 under any continuous prior. This is mathematically correct but unhelpful.",
+    "Formalization 2 (approximate): P(θ ∈ [0.45, 0.55]) using Beta(8,4) posterior = ∫ from 0.45 to 0.55 of Beta(8,4) ≈ 0.107.",
+    "Formalization 3 (Bayes factor): Compare P(data|fair) vs P(data|biased). P(7H in 10 | θ=0.5) = C(10,7)×0.5^10 = 0.1172. P(data|uniform θ) = 1/11 ≈ 0.0909. BF = 0.1172/0.0909 ≈ 1.29, giving posterior odds ≈ 0.56 if prior odds are 1:1.",
+    "Colleague 1 is reasoning informally and the 80% estimate has no mathematical basis.",
+    "Colleague 2 is confusing 'not rejecting the null' with evidence FOR the null — a classic frequentist error.",
+    "Colleague 3 is on the right track but must specify what 'fair' means (exactly 0.5 vs approximately 0.5).",
+    "The correct answer must acknowledge the structural ambiguity: the answer ranges from 0 to 0.55 depending on formalization."
+  ],
+  "common_failure_modes": [
+    "Giving a single confident answer without recognizing the fundamental ambiguity in the question",
+    "Confusing 'failure to reject the null' with 'probability the null is true'",
+    "Not recognizing that P(θ = 0.5 exactly) = 0 under continuous priors",
+    "Using the first colleague's intuitive reasoning instead of formal calculation",
+    "Choosing one formalization without acknowledging that others exist and give different answers"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "original"
+  }
+}

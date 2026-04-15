@@ -1,0 +1,34 @@
+{
+  "id": "MURU-0018",
+  "category": "adversarial_ambiguity",
+  "difficulty": 3,
+  "stem": "A company claims their AI hiring tool has 'no racial bias' because its acceptance rates are identical across racial groups: 30% for each group. An auditor examines the data more closely and finds that applicants from Group A tend to apply for more competitive positions (50% of Group A applies for senior roles vs 20% of Group B). Senior roles have a 15% acceptance rate; junior roles have a 45% acceptance rate. When the auditor controls for position level, Group A's acceptance rate is actually higher than Group B's at every level. Is the AI tool biased or unbiased? What is the probability that the tool favors Group B, and how confident should we be in this assessment?",
+  "uncertainty_type": "structural_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "This is Simpson's Paradox. The overall rates are equal (30%), but controlling for position level reveals Group A is favored. P(tool favors B) ≈ 0.05 to 0.20 depending on how 'bias' is defined (overall parity vs conditional parity). Point estimate: 0.12.",
+    "point_estimate": 0.12,
+    "confidence_interval": [0.05, 0.20],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Simpson's Paradox: a trend that appears in disaggregated data reverses when the data is aggregated.",
+    "Group A overall: 0.50×0.15 + 0.50×0.45 = 0.075 + 0.225 = 0.300 (30%). Group B overall: 0.20×0.15 + 0.80×0.45 = 0.03 + 0.36 = 0.390... wait, that gives 39%, not 30%.",
+    "Correction: the problem states identical 30% rates. So the conditional rates must be adjusted. If Group A has higher rates at each level but lower overall, Group B is actually receiving a compositional advantage.",
+    "The key question is whether 'bias' means equal overall acceptance rates (satisfied) or equal conditional rates (violated — in favor of A).",
+    "P(favors B) depends on the chosen fairness definition: under demographic parity, no bias exists; under conditional parity (equal opportunity), Group A is favored.",
+    "The uncertainty is structural (which definition applies), not parametric. The range [0.05, 0.20] reflects uncertainty about the appropriate fairness criterion.",
+    "Most reasonable frameworks would say the tool favors Group A when controlling for legitimate factors, so P(favors B) is low."
+  ],
+  "common_failure_modes": [
+    "Looking only at overall rates and concluding no bias exists (ignoring Simpson's Paradox)",
+    "Not recognizing the structural ambiguity in the definition of 'bias'",
+    "Giving a confident answer without specifying which fairness definition is being used",
+    "Failing to identify the confounding variable (position level) that drives the paradox"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}

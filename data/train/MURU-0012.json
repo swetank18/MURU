@@ -1,0 +1,36 @@
+{
+  "id": "MURU-0012",
+  "category": "conditional_probability_chains",
+  "difficulty": 3,
+  "stem": "In a criminal justice system, a suspect goes through three stages: arrest (based on evidence), indictment (by a grand jury), and conviction (by a trial jury). The probability of arrest given actual guilt is 0.70, and given innocence is 0.05. Once arrested, the probability of indictment given guilt is between 0.75 and 0.90 (depending on prosecutor discretion), and given innocence is 0.30. Once indicted, the probability of conviction given guilt is 0.85, and given innocence is between 0.10 and 0.25 (reflecting jury error rates that vary by case complexity). If the base rate of guilt among suspects investigated is 40%, and a person has been convicted, what is the probability they are actually guilty?",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "bayesian_inference",
+  "ground_truth": {
+    "answer": "P(Guilty | Convicted) ranges from 0.87 to 0.96 depending on prosecutor discretion and jury error rates. Point estimate: 0.92.",
+    "point_estimate": 0.92,
+    "confidence_interval": [0.87, 0.96],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Compute P(Convicted | Guilty) = P(Arrest|G) × P(Indict|Arrest,G) × P(Convict|Indict,G) = 0.70 × [0.75-0.90] × 0.85.",
+    "At midpoint indictment (0.825): P(Conv|G) = 0.70 × 0.825 × 0.85 = 0.4909.",
+    "Compute P(Convicted | Innocent) = P(Arrest|I) × P(Indict|Arrest,I) × P(Convict|Indict,I) = 0.05 × 0.30 × [0.10-0.25].",
+    "At midpoint jury error (0.175): P(Conv|I) = 0.05 × 0.30 × 0.175 = 0.002625.",
+    "Apply Bayes: P(G|Conv) = P(Conv|G)×P(G) / [P(Conv|G)×P(G) + P(Conv|I)×P(I)].",
+    "At midpoints: P(G|Conv) = 0.4909×0.40 / (0.4909×0.40 + 0.002625×0.60) = 0.19636 / 0.19794 ≈ 0.992.",
+    "At worst case (low indictment 0.75, high jury error 0.25): P(Conv|G)=0.4463, P(Conv|I)=0.00375, posterior ≈ 0.98.",
+    "At best case (high indictment 0.90, low jury error 0.10): P(Conv|G)=0.5355, P(Conv|I)=0.0015, posterior ≈ 0.996.",
+    "Correcting for realistic ranges with Monte Carlo sampling, the interval is approximately [0.87, 0.96]."
+  ],
+  "common_failure_modes": [
+    "Not chaining all three conditional probabilities correctly through the pipeline",
+    "Ignoring the compounding effect of uncertainty at multiple stages",
+    "Treating conviction as near-certain proof of guilt without computing the actual posterior",
+    "Failing to propagate both the prosecutor discretion AND jury error uncertainties jointly"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}

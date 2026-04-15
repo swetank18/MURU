@@ -1,0 +1,34 @@
+{
+  "id": "MURU-0014",
+  "category": "distribution_estimation",
+  "difficulty": 2,
+  "stem": "A city's transportation department wants to estimate the average daily number of cyclists crossing a particular bridge. They have automated counter data for 14 days, but the counter has a known measurement error: it undercounts by 5% to 15% due to sensor limitations (e.g., two cyclists passing simultaneously are counted as one). The raw counter readings for the 14 days are: 120, 135, 142, 118, 155, 130, 128, 145, 138, 160, 125, 133, 148, 140. Estimate the true average daily cyclist count and provide a confidence interval that accounts for both sampling variability and the systematic measurement error.",
+  "uncertainty_type": "data_uncertainty",
+  "required_framework": "frequentist_inference",
+  "ground_truth": {
+    "answer": "Raw sample mean is 137.0. Adjusting for 5-15% undercount: true mean ∈ [144.2, 161.2]. Combined with sampling variability, the 95% CI is [139.5, 168.0]. Point estimate at 10% correction: 152.2.",
+    "point_estimate": 152.2,
+    "confidence_interval": [139.5, 168.0],
+    "ci_level": 0.95
+  },
+  "solution_steps": [
+    "Calculate raw sample mean: (120+135+142+118+155+130+128+145+138+160+125+133+148+140)/14 = 1918/14 ≈ 137.0.",
+    "Calculate raw sample standard deviation: s ≈ 12.1.",
+    "Raw 95% CI: 137.0 ± t(13,0.025) × 12.1/√14 = 137.0 ± 2.160 × 3.23 ≈ 137.0 ± 6.98 = [130.0, 144.0].",
+    "Apply undercount correction: if counter reads X, true count is X/(1-e) where e ∈ [0.05, 0.15].",
+    "Lower bound adjustment (5% undercount): [130.0/0.95, 144.0/0.95] = [136.8, 151.6]. Upper bound (15%): [130.0/0.85, 144.0/0.85] = [152.9, 169.4].",
+    "Combined interval spanning both sources of uncertainty: approximately [139.5, 168.0].",
+    "Point estimate at 10% correction: 137.0 / 0.90 ≈ 152.2."
+  ],
+  "common_failure_modes": [
+    "Computing a simple confidence interval from raw counts without correcting for systematic undercount",
+    "Applying a single correction factor (e.g., exactly 10%) instead of treating it as a range",
+    "Not combining the sampling uncertainty with the measurement error uncertainty",
+    "Treating the systematic error as random noise rather than a bias"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}

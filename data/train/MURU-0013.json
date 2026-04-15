@@ -1,0 +1,32 @@
+{
+  "id": "MURU-0013",
+  "category": "distribution_estimation",
+  "difficulty": 2,
+  "stem": "A researcher collects response times from 30 participants in a cognitive task. The sample mean is 450ms with a sample standard deviation of 80ms. However, the researcher suspects the data may be slightly right-skewed because 5 of the 30 participants had unusually high response times (above 600ms). Assuming the underlying distribution is approximately normal but acknowledging the small sample and potential skewness, estimate the population mean response time and provide a confidence interval. Consider that if the 5 outliers are excluded, the remaining 25 participants have a mean of 420ms with standard deviation of 50ms.",
+  "uncertainty_type": "data_uncertainty",
+  "required_framework": "frequentist_inference",
+  "ground_truth": {
+    "answer": "The population mean estimate ranges from 420ms to 450ms depending on outlier treatment. With all data: 450ms ± 30ms. Without outliers: 420ms ± 21ms. Combined interval: [399, 480] at 95% confidence.",
+    "point_estimate": 435.0,
+    "confidence_interval": [399.0, 480.0],
+    "ci_level": 0.95
+  },
+  "solution_steps": [
+    "With all 30 observations: CI = 450 ± t(29,0.025) × 80/√30 = 450 ± 2.045 × 14.61 ≈ 450 ± 29.9, giving [420.1, 479.9].",
+    "With 25 observations (outliers removed): CI = 420 ± t(24,0.025) × 50/√25 = 420 ± 2.064 × 10 ≈ 420 ± 20.6, giving [399.4, 440.6].",
+    "The choice of whether to include outliers creates structural uncertainty — the true mean likely lies in [399, 480].",
+    "A robust estimate splits the difference: point estimate ≈ 435ms, with the wider interval reflecting analytic uncertainty.",
+    "The key insight is that the data processing choice (include/exclude outliers) is itself a source of uncertainty that should be reported."
+  ],
+  "common_failure_modes": [
+    "Using only the full-sample statistics without considering the impact of potential outliers",
+    "Removing outliers without justification and reporting a narrow CI that hides the analytic uncertainty",
+    "Not recognizing that the choice of statistical treatment introduces structural uncertainty",
+    "Applying a normal distribution CI formula without noting the skewness concern"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "textbook"
+  }
+}

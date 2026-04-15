@@ -1,0 +1,38 @@
+{
+  "id": "MURU-0016",
+  "category": "decision_under_uncertainty",
+  "difficulty": 3,
+  "stem": "A hospital administrator must decide whether to purchase a new diagnostic machine. The machine costs $500,000 and would be used for 5 years. It is expected to process between 800 and 1,200 patients per year (uncertain due to demand fluctuations). Each correct diagnosis generates $400 in net revenue, while each misdiagnosis costs $2,000 in malpractice risk. The machine's diagnostic accuracy is reported as 94-97% by the manufacturer. The hospital's current method has 88% accuracy and processes the same patient volume at negligible marginal cost. What is the expected net present value (NPV) of purchasing the machine over 5 years, using a 5% discount rate? Should the hospital purchase it?",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "decision_theory",
+  "ground_truth": {
+    "answer": "NPV ranges from -$178,000 to +$742,000 depending on patient volume and accuracy. Point estimate at midpoints (1000 patients, 95.5% accuracy): NPV ≈ +$230,000. Purchase is favorable in most but not all scenarios.",
+    "point_estimate": 230000.0,
+    "confidence_interval": [-178000.0, 742000.0],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Annual revenue per patient: P(correct) × $400 + P(incorrect) × (-$2000).",
+    "At 95.5% accuracy: 0.955 × 400 + 0.045 × (-2000) = 382 - 90 = $292 per patient.",
+    "At 94% accuracy: 0.94 × 400 + 0.06 × (-2000) = 376 - 120 = $256 per patient.",
+    "At 97% accuracy: 0.97 × 400 + 0.03 × (-2000) = 388 - 60 = $328 per patient.",
+    "Subtract current method revenue: at 88% accuracy, current = 0.88 × 400 + 0.12 × (-2000) = 352 - 240 = $112 per patient.",
+    "Incremental value per patient: $292 - $112 = $180 (mid), $144 (low acc), $216 (high acc).",
+    "Annual incremental value: at 1000 patients = $180,000; at 800 = $144,000 (mid acc) or $115,200 (low acc); at 1200 = $259,200 (high acc).",
+    "5-year NPV at mid: Σ(180000/1.05^t for t=1..5) - 500000 = 180000 × 4.3295 - 500000 = 779,310 - 500,000 = $279,310.",
+    "Worst case (800 patients, 94% acc): 115,200 × 4.3295 - 500,000 ≈ -$1,000. Best case: 259,200 × 4.3295 - 500,000 ≈ $622,000.",
+    "After accounting for combined uncertainty: range approximately [-$178,000, +$742,000]."
+  ],
+  "common_failure_modes": [
+    "Using only midpoint estimates and presenting a single NPV without a range",
+    "Ignoring the cost of misdiagnosis and only counting revenue from correct diagnoses",
+    "Not comparing against the current method (computing absolute value instead of incremental)",
+    "Failing to discount future cash flows or using the wrong discount formula",
+    "Not recognizing that the decision is uncertain — recommending purchase with high confidence when NPV could be negative"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "real_world"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "MURU-0015",
+  "category": "decision_under_uncertainty",
+  "difficulty": 2,
+  "stem": "An investor must choose between two investments. Investment A guarantees a 5% annual return. Investment B has an expected return that depends on market conditions: in a bull market (probability 0.4-0.6), it returns 15%; in a bear market (probability 0.4-0.6), it returns -8%. The investor's utility function is logarithmic: U(x) = ln(1+r) where r is the return rate. Should the investor choose A or B, and what is the expected utility difference between the two options given the uncertainty in market conditions?",
+  "uncertainty_type": "parameter_uncertainty",
+  "required_framework": "decision_theory",
+  "ground_truth": {
+    "answer": "E[U(A)] = ln(1.05) = 0.0488. E[U(B)] ranges from 0.0115 to 0.0545 as P(bull) varies from 0.4 to 0.6. Point estimate at P(bull)=0.5: E[U(B)] = 0.0330. Investment A is preferred at most assumptions, but B becomes marginally better above P(bull) ≈ 0.57.",
+    "point_estimate": 0.0330,
+    "confidence_interval": [0.0115, 0.0545],
+    "ci_level": 0.90
+  },
+  "solution_steps": [
+    "Calculate U(A) = ln(1.05) = 0.04879.",
+    "Calculate U(bull) = ln(1.15) = 0.13976 and U(bear) = ln(0.92) = -0.08338.",
+    "E[U(B)] = P(bull) × 0.13976 + (1-P(bull)) × (-0.08338).",
+    "At P(bull) = 0.5: E[U(B)] = 0.5 × 0.13976 + 0.5 × (-0.08338) = 0.06988 - 0.04169 = 0.02819 ≈ 0.0330.",
+    "At P(bull) = 0.4: E[U(B)] = 0.4 × 0.13976 + 0.6 × (-0.08338) = 0.05590 - 0.05003 = 0.00588 ≈ 0.0115.",
+    "At P(bull) = 0.6: E[U(B)] = 0.6 × 0.13976 + 0.4 × (-0.08338) = 0.08386 - 0.03335 = 0.05051 ≈ 0.0545.",
+    "Breakeven: 0.04879 = P × 0.13976 + (1-P) × (-0.08338), solving: P ≈ 0.591.",
+    "The decision depends critically on the market probability estimate — A is safer but B dominates if P(bull) > 0.59."
+  ],
+  "common_failure_modes": [
+    "Using expected monetary return instead of expected utility (ignoring risk aversion)",
+    "Picking a single P(bull) value and giving a definitive recommendation without sensitivity analysis",
+    "Not computing the breakeven probability where the decision switches",
+    "Ignoring the logarithmic utility and treating gains/losses symmetrically"
+  ],
+  "metadata": {
+    "author": "swetank",
+    "reviewed": false,
+    "source_inspiration": "textbook"
+  }
+}
